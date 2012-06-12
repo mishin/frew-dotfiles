@@ -1,0 +1,63 @@
+#!/usr/bin/env perl
+
+use 5.16.0;
+use strictures;
+use IPC::System::Simple qw(system capture);
+$|++;
+
+unless ($ARGV[0]) {
+   print <<'USAGE';
+usage: lxs-merge mergelisting
+
+Will iterate over things to merge, doing various sanity checks for each one.
+File format is just the jira ids for the branches in question.
+USAGE
+   exit 1;
+}
+
+chomp(my $start_rev = capture('git rev-parse HEAD'));
+
+open my $merge_fh, '<', $ARGV[0];
+my %issues;
+while(<$merge_fh>) {
+   chomp;
+   next if m/^\s*#/;
+   chomp(my $out = capture("git branch -r | grep $_"));
+   die "multiple branches for issue $_! (\n$out\n)\n"
+      if scalar(split "\n", $out) > 1;
+   if ($out =~ qr[origin/(.*)$]) {
+      $issues{$_} = $1
+   } else {
+      die "no remote branches for issue $_! instead I found: \n" . capture("git branch | grep $_") . "\n";
+   }
+}
+
+for (sort keys %issues) {
+   my $branch = $issues{$_};
+   my $remote = "origin/$branch";
+   say " == $remote";
+   say " -- look over the code";
+   system('gitk', $remote, '^origin/release');
+   print "Does it look ok? [y/N] ";
+   {
+      chomp(my $response = <STDIN>);
+      exit (1) unless $response =~ /y/i;
+   }
+   my $command = "git merge --no-edit --no-ff $remote";
+   say $command;
+   print capture($command);
+   system($ENV{EDITOR}, 'Changes');
+   print "Feel good about that?? [y/N] ";
+   {
+      chomp(my $response = <STDIN>);
+      exit (1) unless $response =~ /y/i;
+   }
+   system(qw(git add Changes));
+   system(qw(git commit --amend -C HEAD));
+}
+
+END {
+   chomp(my $end_rev = capture('git rev-parse HEAD'));
+
+   print "started at $start_rev, ended at $end_rev\n";
+}
