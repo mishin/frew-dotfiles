@@ -270,19 +270,19 @@ end, 1)
 
 -- {{{ weather
 osweatherwidget = weather_widget(
-   "KBIX", "http://forecast.io/#/f/30.4163,-88.8081/", "OS"
+   "30.4163,-88.8081", "http://forecast.io/#/f/30.4163,-88.8081/", "OS"
 )
 
 awful.widget.layout.margins[osweatherwidget] = { right = 5 };
 
 rcweatherwidget = weather_widget(
-   "KADS", "http://forecast.io/#/f/32.9607,-96.7330/", "Richardson"
+   "32.9607,-96.7330", "http://forecast.io/#/f/32.9607,-96.7330/", "Richardson"
 )
 
 awful.widget.layout.margins[rcweatherwidget] = { left = 5, right = 5 };
 
 gvweatherwidget = weather_widget(
-   "KHQZ", "http://forecast.io/#/f/32.9310,-96.4608/", "Rockwall"
+   "32.9310,-96.4608", "http://forecast.io/#/f/32.9310,-96.4608/", "Rockwall"
 )
 
 awful.widget.layout.margins[gvweatherwidget] = { left = 5 };
