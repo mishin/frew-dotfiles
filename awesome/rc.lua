@@ -119,10 +119,11 @@ weather_widget = function(
 
    vicious.register(actual_widget, vicious.widgets.weather,
       function (widget, args)
-        actual_tooltip:set_text(
-           "City: " .. args["{city}"] ..
-           "\nWind: " .. args["{windmph}"] .. "mph " ..
+       actual_tooltip:set_text(
+           "Summary: " .. args["{weather}"] ..
            "\nSky: " .. args["{sky}"] ..
+           "\nDewpoint: " .. args["{dewpoint}"] .. "°F" ..
+           "\nWind: " .. args["{windmph}"] .. "mph " ..
            "\nHumidity: " .. args["{humid}"] .. "%")
         return name .. " " .. args["{tempf}"] .. "°F"
    end, 60 * 10, code)
