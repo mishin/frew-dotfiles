@@ -1,9 +1,6 @@
 [submodule "zsh/cxregs-bash-tools"]
    path = zsh/cxregs-bash-tools
    url = git://github.com/cxreg/smartcd.git
-[submodule "vimpulse"]
-	path = vimpulse
-	url = git://gitorious.org/vimpulse/vimpulse.git
 [submodule "awesome/vicious"]
 	path = awesome/vicious
 	url = http://git.sysphere.org/vicious
